@@ -31,14 +31,51 @@ public class Menu extends JFrame implements ActionListener {
         Container cp = getContentPane();
         cp.setLayout(null);
 
+        // ภาพ
+        ImageIcon snake = new ImageIcon("./image/616653.png");
+        Image scale = snake.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+        ImageIcon icon1 = new ImageIcon(scale);
+        
+        JLabel pic = new JLabel(icon1);
+        pic.setBounds(320, 50, 150, 150);
 
-        JButton start = new JButton("Start");
-        start.setBounds(350, 350, 100, 40);
+
+        //snake game
+        JLabel snakegame = new JLabel("SNAKE GAME");
+        snakegame.setBounds(315, 220, 200, 50);
+        snakegame.setBackground(new Color(0,125,42));
+        snakegame.setFont(new Font("Monospaced", Font.BOLD, 30));
+        snakegame.setForeground(Color.WHITE);
+        
+
+        // ใส่ชื่อ
+        JTextField nameField = new JTextField("ENTER NAME");
+        nameField.setHorizontalAlignment(JTextField.CENTER);
+        nameField.setFont(new Font("Monospaced", Font.BOLD, 18));
+        nameField.setBackground(new Color(150, 180, 150));
+        nameField.setForeground(Color.DARK_GRAY);
+        nameField.setBounds(220, 350, 360, 40);
+        
+        // ปุ่ม start
+        JButton start = new JButton("START");
+        start.setBounds(350, 450, 100, 40);
         start.setBackground(new Color(0,125,42));
-        start.setFont(new Font("Tahoma", Font.PLAIN, 20));
+        start.setFont(new Font("Monospaced", Font.BOLD, 20));
         start.setForeground(Color.WHITE);
 
+        // ปุ่ม how
+        JButton How = new JButton("HOW");
+        How.setBounds(350, 550, 100, 40);
+        How.setBackground(new Color(0,125,42));
+        How.setFont(new Font("Monospaced", Font.BOLD, 20));
+        How.setForeground(Color.WHITE);
+
+        
+        cp.add(snakegame);
+        cp.add(pic);
+        cp.add(nameField);
         cp.add(start);
+        cp.add(How);
         cp.setBackground(Color.BLACK);
         
         
