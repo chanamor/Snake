@@ -1,5 +1,7 @@
 package gameobj;
-
-public class Food {
+import java.awt.*;
+import javax.swing.*;
+public class Food  {
     
+
 }
