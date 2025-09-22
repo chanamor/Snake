@@ -9,7 +9,7 @@ import java.awt.event.KeyListener;
 public class Board extends JPanel implements KeyListener{
 
 
-        final int border = 800;
+        final int border = 600;
         final int border_height = border;
         final int tile = 25 ;
 

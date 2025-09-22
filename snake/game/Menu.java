@@ -2,22 +2,25 @@
 package game;
 
 import javax.swing.*;
+
+import board.*;
+
 import java.awt.*;
 import java.awt.event.*;
 
 public class Menu extends JFrame implements ActionListener {
     
-    
+    private JButton start , how ;
 
     public Menu() {
 
         // ตั้งค่าหน้าต่าง
         
         setTitle("Snake Game");
-        setSize(800, 800);
+        setSize(600, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setVisible(true);
+        setResizable(true);
 
         // ตั้งค่าไอคอน
         ImageIcon icon = new ImageIcon("./image/616653.png");
@@ -29,69 +32,84 @@ public class Menu extends JFrame implements ActionListener {
       
           
         Container cp = getContentPane();
-        cp.setLayout(null);
+        cp.setBackground(Color.BLACK);
+        cp.setLayout(new GridBagLayout());
 
-        // ภาพ
-        ImageIcon snake = new ImageIcon("./image/616653.png");
-        Image scale = snake.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-        ImageIcon icon1 = new ImageIcon(scale);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(15, 0, 15, 0); // เว้นระยะห่าง
+        gbc.gridx = 0;
+
+        // โลโก้ 
         
+        ImageIcon snake = new ImageIcon("./image/616653.png");
+        Image scale = snake.getImage().getScaledInstance(250, 250, Image.SCALE_SMOOTH);
+        ImageIcon icon1 = new ImageIcon(scale);
+
         JLabel pic = new JLabel(icon1);
-        pic.setBounds(320, 50, 150, 150);
+        gbc.gridy = 0;
+        cp.add(pic, gbc);
 
-
-        //snake game
+    
+        // Snake Game 
+        
         JLabel snakegame = new JLabel("SNAKE GAME");
-        snakegame.setBounds(315, 220, 200, 50);
-        snakegame.setBackground(new Color(0,125,42));
         snakegame.setFont(new Font("Monospaced", Font.BOLD, 30));
         snakegame.setForeground(Color.WHITE);
-        
+        gbc.gridy = 1;
+        cp.add(snakegame, gbc);
 
-        // ใส่ชื่อ
-        JTextField nameField = new JTextField("ENTER NAME");
+        
+        // Name Field
+        
+        JTextField nameField = new JTextField("ENTER NAME", 20);
         nameField.setHorizontalAlignment(JTextField.CENTER);
         nameField.setFont(new Font("Monospaced", Font.BOLD, 18));
         nameField.setBackground(new Color(150, 180, 150));
         nameField.setForeground(Color.DARK_GRAY);
-        nameField.setBounds(220, 350, 360, 40);
+        gbc.gridy = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL; 
+        cp.add(nameField, gbc);
+
         
-        // ปุ่ม start
-        JButton start = new JButton("START");
-        start.setBounds(350, 450, 100, 40);
-        start.setBackground(new Color(0,125,42));
+        // Start Button
+        
+        start = new JButton("START");
         start.setFont(new Font("Monospaced", Font.BOLD, 20));
+        start.setBackground(new Color(0, 125, 42));
         start.setForeground(Color.WHITE);
-
-        // ปุ่ม how
-        JButton How = new JButton("HOW");
-        How.setBounds(350, 550, 100, 40);
-        How.setBackground(new Color(0,125,42));
-        How.setFont(new Font("Monospaced", Font.BOLD, 20));
-        How.setForeground(Color.WHITE);
+        start.addActionListener(this);
+        gbc.gridy = 3;
+        gbc.fill = GridBagConstraints.NONE;
+        cp.add(start, gbc);
 
         
-        cp.add(snakegame);
-        cp.add(pic);
-        cp.add(nameField);
-        cp.add(start);
-        cp.add(How);
-        cp.setBackground(Color.BLACK);
+        // How Button
         
-        
-        
+        how = new JButton("HOW");
+        how.setFont(new Font("Monospaced", Font.BOLD, 20));
+        how.setBackground(new Color(0, 125, 42));
+        how.setForeground(Color.WHITE);
+        how.addActionListener(this);
+        gbc.gridy = 4;
+        cp.add(how, gbc);
 
+
+
+        setVisible(true);
     }
+        
 
-
-
-
-
-
+    
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
+       
+        if (e.getSource() == start) {
+            dispose();
+           new Board();
+        } else if (e.getSource() == how) {
+            JOptionPane.showMessageDialog(this, "W A S D to move a snake \n Eat an Apple to grow");
+        }
+        
     }
 }
