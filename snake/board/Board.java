@@ -1,6 +1,9 @@
 package board;
 
 import javax.swing.*;
+
+import gameobj.Snake;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -25,6 +28,8 @@ public class Board extends JPanel implements KeyListener{
             frame.setVisible(true);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.add(this);
+            Snake snake = new Snake(border, border_height);
+            frame.add(snake);
             setBackground(Color.black);
         }
 
