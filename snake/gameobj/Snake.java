@@ -1,8 +1,6 @@
 package gameobj;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.ArrayList.*;
-import java.util.random.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -81,17 +79,6 @@ public class Snake extends JPanel implements ActionListener,KeyListener{
         Tile snakePart = snakebody.get(i);
         g.fillRect(snakePart.x*tileSize,snakePart.y*tileSize,tileSize,tileSize);
       }
-
-      //Score
-      g.setFont(new Font("Arail", Font.PLAIN, 16));
-      if(gameOver) {
-        g.setColor(Color.red);
-        g.drawString("Game Over" + String.valueOf(snakebody.size()), tileSize - 16, tileSize);
-      }
-      else {
-        g.drawString("Score : "+ String.valueOf(snakebody.size()), tileSize - 16, tileSize );
-        
-      }
     }
 
     public void placeFood(){
@@ -148,10 +135,10 @@ public class Snake extends JPanel implements ActionListener,KeyListener{
     }
     @Override
     public void keyPressed(KeyEvent e) {
-     if (e.getKeyCode()==KeyEvent.VK_UP&& velocityY != 1) {
+     if (e.getKeyCode()==KeyEvent.VK_UP && velocityY != 1) {
         velocityX=0;
         velocityY=-1;
-     } else if (e.getKeyCode()==KeyEvent.VK_DOWN&& velocityY != -1) {
+     } else if (e.getKeyCode()==KeyEvent.VK_DOWN&& velocityY != -1  ) {
         velocityX=0;
         velocityY=1;
      } 
@@ -163,6 +150,25 @@ public class Snake extends JPanel implements ActionListener,KeyListener{
         velocityX=1;
         velocityY=0;
      }      
+
+     if (e.getKeyCode()==KeyEvent.VK_W && velocityY != 1) {
+        velocityX=0;
+        velocityY=-1;
+     } else if (e.getKeyCode()==KeyEvent.VK_S&& velocityY != -1) {
+        velocityX=0;
+        velocityY=1;
+     } 
+      else if (e.getKeyCode()==KeyEvent.VK_A&& velocityX !=1) {
+        velocityX=-1;
+        velocityY=0;
+     }  
+     else if (e.getKeyCode()==KeyEvent.VK_D&& velocityX != -1) {
+        velocityX=1;
+        velocityY=0;
+     }  
+     
+     
+
     }
     @Override
     public void keyReleased(KeyEvent e) {
