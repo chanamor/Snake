@@ -1,16 +1,16 @@
 package board;
 
 import javax.swing.*;
+
+import gameobj.Snake;
+
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import gameobj.*;
 
 
-public class Board extends JPanel implements KeyListener{
+public class Board extends JPanel {
 
 
-        final int border = 600;
+        final int border = 800;
         final int border_height = border;
         final int tile = 25 ;
 
@@ -20,14 +20,22 @@ public class Board extends JPanel implements KeyListener{
         
 
         public Board() {
-            JFrame frame = new JFrame();
+            JFrame frame = new JFrame("Snake");
+            
+            
             frame.setSize(border, border_height);
             frame.setResizable(false);
             frame.setVisible(true);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            Snake snakegmae = new Snake(border,border_height);
-            frame.add(snakegmae);
+            
+            frame.add(this);
             setBackground(Color.black);
+
+            Snake snakegame=new Snake(border,border_height );
+            frame.add(snakegame);
+            frame.pack();
+            //Action   
+            snakegame.requestFocus();
         }
 
         protected void paintComponent(Graphics g){
@@ -48,26 +56,12 @@ public class Board extends JPanel implements KeyListener{
             }
 
            
-          
-  
-        }
 
-        @Override
-        public void keyTyped(KeyEvent e) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'keyTyped'");
-        }
+           
 
-        @Override
-        public void keyPressed(KeyEvent e) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'keyPressed'");
-        }
 
-        @Override
-        public void keyReleased(KeyEvent e) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'keyReleased'");
+
+           
         }
 
         
