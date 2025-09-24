@@ -29,7 +29,7 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         this.boardHeight = boardHeight;
         setPreferredSize(new Dimension(this.boardWidth, this.boardHeight));
         setBackground(Color.BLACK);
-
+        
         addKeyListener(this);
         setFocusable(true);
 
@@ -38,8 +38,6 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         snakeBody = new ArrayList<>();
 
         
-       
-
         // Game loop
         velocityX = 0;
         velocityY = 1;
