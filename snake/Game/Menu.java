@@ -1,9 +1,9 @@
+
 package Game;
 
 import javax.swing.*;
 
 import board.*;
-import gameobj.Snake;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -27,9 +27,6 @@ public class Menu extends JFrame implements ActionListener {
         setIconImage(icon.getImage());
 
 
-      
-
-      
           
         Container cp = getContentPane();
         cp.setBackground(Color.BLACK);
@@ -105,7 +102,7 @@ public class Menu extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
        
         if (e.getSource() == start) {
-            dispose();
+        dispose();
            new Board();
         } else if (e.getSource() == how) {
             JOptionPane.showMessageDialog(this, "W A S D to move a snake \n Eat an Apple to grow");
