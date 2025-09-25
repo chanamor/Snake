@@ -8,13 +8,13 @@ import javax.swing.*;
 
 public class Snake extends JPanel implements ActionListener, KeyListener {
 
-    int boardWidth;
-    int boardHeight;
-    int tileSize = 25;
+    int boardWidth;//ความกว้างของบอร์ด
+    int boardHeight;//ความสูงของบอร์ด
+    int tileSize = 25;//ขนาด 1 ช่อง (ตาราง)
 
     // Snake
-    Tile snakeHead;
-    ArrayList<Tile> snakeBody;
+    Tile snakeHead;//หัวงู
+    ArrayList<Tile> snakeBody;//ลำตัวงู
 
     
     
@@ -34,13 +34,13 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         setFocusable(true);
 
         // Snake
-        snakeHead = new Tile(5, 5);
-        snakeBody = new ArrayList<>();
+        snakeHead = new Tile(5, 5);//เริ่มตำแหน่งหัวงู
+        snakeBody = new ArrayList<>();//ตัวงู
 
         
         // Game loop
         velocityX = 0;
-        velocityY = 1;
+        velocityY = 1;//งูเริ่มต้นขยับลงล่าง
         gameLoop = new Timer(100, this);
         gameLoop.start();
     }
@@ -50,8 +50,8 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         draw(g);
     }
 
-    public void draw(Graphics g) {
-        for (int i = 0; i < boardWidth / tileSize; i++) {
+    public void draw(Graphics g) {//การวาด
+        for (int i = 0; i < boardWidth / tileSize; i++) {//วาดตาราง
             g.drawLine(i * tileSize, 0, i * tileSize, boardHeight);
             g.drawLine(0, i * tileSize, boardWidth, i * tileSize);
         }
@@ -60,11 +60,11 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
        
 
         // Draw snake head
-        g.setColor(Color.GREEN);
+        g.setColor(Color.GREEN);//วาดหัวงู
         g.fillRect(snakeHead.x * tileSize, snakeHead.y * tileSize, tileSize, tileSize);
 
         // Draw snake body
-        for (Tile part : snakeBody) {
+        for (Tile part : snakeBody) {//วาดตัวงู
             g.fillRect(part.x * tileSize, part.y * tileSize, tileSize, tileSize);
         }
     }
@@ -79,7 +79,7 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         
 
         // Move snake body
-        for (int i = snakeBody.size() - 1; i >= 0; i--) {
+        for (int i = snakeBody.size() - 1; i >= 0; i--) {//ย้ายงูตามตามหัว
             if (i == 0) {
                 snakeBody.get(i).x = snakeHead.x;
                 snakeBody.get(i).y = snakeHead.y;
@@ -94,7 +94,7 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         snakeHead.y += velocityY;
 
         // Check collision with self
-        for (Tile part : snakeBody) {
+        for (Tile part : snakeBody) {//ถ้ากัดตัวเองGame Over
             if (collision(snakeHead, part)) {
                 gameOver = true;
             }
@@ -135,4 +135,5 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         // optional
     }
 }
+
 
