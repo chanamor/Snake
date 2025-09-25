@@ -1,5 +1,5 @@
 package gameobj;
-
+//Class รับพิกัด
 public class Tile {
     int x;
     int y;
@@ -15,3 +15,4 @@ public class Tile {
     public void setY(int y) { this.y = y; }
 
 }
+
