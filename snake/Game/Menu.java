@@ -11,6 +11,7 @@ import java.awt.event.*;
 public class Menu extends JFrame implements ActionListener {
     
     private JButton start , how ;
+    private JTextField nameField;
 
     public Menu() {
 
@@ -27,6 +28,9 @@ public class Menu extends JFrame implements ActionListener {
         setIconImage(icon.getImage());
 
 
+      
+
+      
           
         Container cp = getContentPane();
         cp.setBackground(Color.BLACK);
@@ -58,7 +62,7 @@ public class Menu extends JFrame implements ActionListener {
         
         // Name Field
         
-        JTextField nameField = new JTextField("ENTER NAME", 20);
+        nameField = new JTextField("ENTER NAME");
         nameField.setHorizontalAlignment(JTextField.CENTER);
         nameField.setFont(new Font("Monospaced", Font.BOLD, 18));
         nameField.setBackground(new Color(150, 180, 150));
@@ -102,8 +106,14 @@ public class Menu extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
        
         if (e.getSource() == start) {
-        dispose();
-           new Board();
+            String playerName = nameField.getText().trim(); 
+
+            if (playerName.isEmpty() || playerName.equals("ENTER NAME")) {
+                JOptionPane.showMessageDialog(this,"Please enter your name first! ");
+            }else{
+            dispose();
+           new Board(playerName);
+            }
         } else if (e.getSource() == how) {
             JOptionPane.showMessageDialog(this, "W A S D to move a snake \n Eat an Apple to grow");
         }

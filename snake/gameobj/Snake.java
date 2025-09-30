@@ -8,6 +8,8 @@ import javax.swing.*;
 
 public class Snake extends JPanel implements ActionListener, KeyListener {
 
+    String playerName;
+
     int boardWidth;//ความกว้างของบอร์ด
     int boardHeight;//ความสูงของบอร์ด
     int tileSize = 25;//ขนาด 1 ช่อง (ตาราง)
@@ -25,6 +27,7 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
     boolean gameOver = false;
 
     public Snake(int boardWidth, int boardHeight) {
+        
         this.boardWidth = boardWidth;
         this.boardHeight = boardHeight;
         setPreferredSize(new Dimension(this.boardWidth, this.boardHeight));
@@ -67,6 +70,9 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         for (Tile part : snakeBody) {//วาดตัวงู
             g.fillRect(part.x * tileSize, part.y * tileSize, tileSize, tileSize);
         }
+
+
+       
     }
 
     public boolean collision(Tile t1, Tile t2) {
