@@ -8,10 +8,12 @@ import javax.swing.*;
 
 public class Snake extends JPanel implements ActionListener, KeyListener {
 
+    private int border;
+    private int tile;
+
     String playerName;
 
-    int boardWidth;//ความกว้างของบอร์ด
-    int boardHeight;//ความสูงของบอร์ด
+    
     int tileSize = 25;//ขนาด 1 ช่อง (ตาราง)
 
     // Snake
@@ -26,11 +28,11 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
     int velocityY;
     boolean gameOver = false;
 
-    public Snake(int boardWidth, int boardHeight) {
+    public Snake(int border, int tile) {
         
-        this.boardWidth = boardWidth;
-        this.boardHeight = boardHeight;
-        setPreferredSize(new Dimension(this.boardWidth, this.boardHeight));
+        this.border = border;
+        this.tile = tile;
+        
         setBackground(Color.BLACK);
         
         addKeyListener(this);
@@ -54,14 +56,7 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
     }
 
     public void draw(Graphics g) {//การวาด
-        for (int i = 0; i < boardWidth / tileSize; i++) {//วาดตาราง
-            g.drawLine(i * tileSize, 0, i * tileSize, boardHeight);
-            g.drawLine(0, i * tileSize, boardWidth, i * tileSize);
-        }
-
-    
-       
-
+         
         // Draw snake head
         g.setColor(Color.GREEN);//วาดหัวงู
         g.fillRect(snakeHead.x * tileSize, snakeHead.y * tileSize, tileSize, tileSize);
@@ -98,6 +93,25 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         // Move snake head
         snakeHead.x += velocityX;
         snakeHead.y += velocityY;
+
+        int maxX = border / tile;
+        int maxY = border / tile;
+
+      // แนวนอน
+    if (snakeHead.x < 0) {
+        snakeHead.x = maxX-1;       // ออกซ้าย → ไปขวาสุด
+    } else if (snakeHead.x >= maxX) {
+        snakeHead.x = 0;                   // ออกขวา → ไปซ้ายสุด
+    }
+
+    // แนวตั้ง
+    if (snakeHead.y < 0) {
+        snakeHead.y = maxY-1;       // ออกบน → ไปล่างสุด
+    } else if (snakeHead.y >= maxY) {
+        snakeHead.y = 0;                   // ออกล่าง → ไปบนสุด
+    }
+
+
 
         // Check collision with self
         for (Tile part : snakeBody) {//ถ้ากัดตัวเองGame Over

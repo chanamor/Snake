@@ -1,9 +1,6 @@
 package board;
-
 import javax.swing.*;
-
 import gameobj.Snake;
-
 import java.awt.*;
 
 
@@ -24,7 +21,6 @@ public class Board extends JPanel {
 
 
             JFrame frame = new JFrame("Snake");
-            frame.setResizable(false);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
             ImageIcon icon = new ImageIcon("./image/616653.png");
@@ -35,7 +31,7 @@ public class Board extends JPanel {
             layeredPane.setPreferredSize(new Dimension(border, border_height));
 
         // Snake game (เลเยอร์ล่าง)
-            snakegame = new Snake(border, border_height);
+            snakegame = new Snake(border, tile);
             snakegame.setBounds(0, 0, border, border_height);
             layeredPane.add(snakegame, Integer.valueOf(0));
 
@@ -46,15 +42,16 @@ public class Board extends JPanel {
 
             frame.setContentPane(layeredPane);
             frame.pack();
+            frame.setResizable(false);
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
 
-        snakegame.requestFocus();
+            snakegame.requestFocus();
         }
 
         protected void paintComponent(Graphics g){
             super.paintComponent(g);
-            g.setColor(Color.WHITE);
+            g.setColor(Color.GREEN);
             g.setFont(new Font("Monospaced", Font.BOLD, 18));
             g.drawString("Player: " + playerName, 10, 20);
 
