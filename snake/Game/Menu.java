@@ -1,3 +1,4 @@
+
 package Game;
 
 import javax.swing.*;
@@ -6,12 +7,10 @@ import board.*;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
 
 public class Menu extends JFrame implements ActionListener {
     
     private JButton start , how ;
-    private JTextField nameField;
 
     public Menu() {
 
@@ -62,13 +61,13 @@ public class Menu extends JFrame implements ActionListener {
         
         // Name Field
         
-        nameField = new JTextField("ENTER NAME");
+        JTextField nameField = new JTextField("ENTER NAME", 20);
         nameField.setHorizontalAlignment(JTextField.CENTER);
         nameField.setFont(new Font("Monospaced", Font.BOLD, 18));
         nameField.setBackground(new Color(150, 180, 150));
         nameField.setForeground(Color.DARK_GRAY);
         gbc.gridy = 2;
-        gbc.fill = GridBagConstraints.HORIZONTAL; 
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         cp.add(nameField, gbc);
 
         
@@ -106,41 +105,11 @@ public class Menu extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
        
         if (e.getSource() == start) {
-            String playerName = nameField.getText().trim(); 
-
-            if (playerName.isEmpty() || playerName.equals("ENTER NAME")) {
-                JOptionPane.showMessageDialog(this,"Please enter your name first! ");
-            }else{
-            write_csv(playerName);
-            dispose();
-           new Board(playerName);
-           
-            }
+        dispose();
+           new Board(getName());
         } else if (e.getSource() == how) {
             JOptionPane.showMessageDialog(this, "W A S D to move a snake \n Eat an Apple to grow");
         }
         
-    }
-    //สร้างไฟล์เก็บรายชื่อ
-    public void write_csv(String playerName) {
-        
-        File f = null;
-        FileWriter fw = null;
-        BufferedWriter bw = null;
-        try {
-            f = new File("./Snake-main/snake/Nameplayer/NAME.csv");
-            fw = new FileWriter(f,true);
-            bw = new BufferedWriter(fw);
-            bw.write(playerName+"\n");
-        } catch (Exception e) {
-            System.out.println(e);
-        } finally {
-            try {
-                if (bw != null) bw.close();
-                if (fw != null) fw.close();
-            } catch (Exception e){
-                System.out.println(e);
-            }
-        }
     }
 }
