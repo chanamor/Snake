@@ -20,8 +20,7 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
     Tile snakeHead;//หัวงู
     ArrayList<Tile> snakeBody;//ลำตัวงู
 
-    //Food
-    Food food;
+    
     
     // Logic
     Timer gameLoop;
@@ -43,10 +42,6 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         snakeHead = new Tile(5, 5);//เริ่มตำแหน่งหัวงู
         snakeBody = new ArrayList<>();//ตัวงู
 
-        // Food
-        food = new Food(border, border, tileSize);
-
-
         
         // Game loop
         velocityX = 0;
@@ -61,10 +56,7 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
     }
 
     public void draw(Graphics g) {//การวาด
-                 // Draw food
-        food.draw(g);
-
-
+         
         // Draw snake head
         g.setColor(Color.GREEN);//วาดหัวงู
         g.fillRect(snakeHead.x * tileSize, snakeHead.y * tileSize, tileSize, tileSize);
@@ -83,14 +75,7 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
     }
 
     public void move() {
-      //Food
-        Tile foodTile = food.getFoodTile();
-        if (collision(snakeHead, foodTile)) {
-            snakeBody.add(new Tile(foodTile.getX(), foodTile.getY()));
-            food.placeFood();
-        }
-
-
+      
 
         
 
