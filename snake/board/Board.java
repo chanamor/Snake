@@ -26,7 +26,7 @@ public class Board extends JPanel {
             ImageIcon icon = new ImageIcon("./image/616653.png");
             frame.setIconImage(icon.getImage());
 
-        // ✅ ใช้ JLayeredPane
+        // ใช้ JLayeredPane
             JLayeredPane layeredPane = new JLayeredPane();
             layeredPane.setPreferredSize(new Dimension(border, border_height));
 
@@ -36,7 +36,7 @@ public class Board extends JPanel {
             layeredPane.add(snakegame, Integer.valueOf(0));
 
         // Board (เลเยอร์บน วาด HUD)
-            this.setOpaque(false); // ✅ โปร่งใส ไม่ทับ Snake
+            this.setOpaque(false); //  โปร่งใส ไม่ทับ Snake
             this.setBounds(0, 0, border, border_height);
             layeredPane.add(this, Integer.valueOf(1));
 
@@ -66,5 +66,6 @@ public class Board extends JPanel {
         }
 
         
+
 
 
