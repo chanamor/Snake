@@ -57,8 +57,26 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        draw(g);
+        
+
+        if (gameOver) {
+            drawgameover(g);
+        }else{
+            draw(g);
+        }
+
+        
     }
+        
+    
+
+    private void drawgameover(Graphics g){
+        g.setColor(Color.RED);
+        g.setFont(new Font("Monospaced", Font.BOLD, 40));
+        FontMetrics metrics = getFontMetrics(g.getFont());
+        g.drawString("GAME OVER", (border - metrics.stringWidth("GAME OVER")) / 2, border / 2);
+    }
+    
 
     public void draw(Graphics g) {//การวาด
                  // Draw food
