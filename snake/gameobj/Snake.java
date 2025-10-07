@@ -10,6 +10,7 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
 
     private int border;
     private int tile;
+    private JButton restartButton;
 
     String playerName;
 
@@ -75,6 +76,30 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         g.setFont(new Font("Monospaced", Font.BOLD, 40));
         FontMetrics metrics = getFontMetrics(g.getFont());
         g.drawString("GAME OVER", (border - metrics.stringWidth("GAME OVER")) / 2, border / 2);
+
+
+        if (restartButton == null) {
+            restartButton = new JButton("Restart");
+            restartButton.setBounds(border / 2 - 60, border / 2 + 50, 120, 40);
+            restartButton.setBackground(new Color(0, 125, 42));
+            restartButton.setFont(new Font("Monospaced", Font.BOLD, 18));
+            restartButton.setForeground(Color.WHITE);
+
+            restartButton.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    restartgame();
+                }
+                
+            });
+
+
+
+            this.setLayout(null);
+            this.add(restartButton);
+            this.repaint();
+        }
     }
     
 
@@ -152,6 +177,30 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
                 gameOver = true;
             }
         }
+    }
+
+
+    private void restartgame(){
+        snakeBody.clear();
+        snakeBody.add(new Tile(5, 5));
+        snakeHead = new Tile(5, 5);
+
+
+        velocityX = 1;
+        velocityY =0;
+
+
+        food.placeFood();
+
+
+        gameOver = false;
+
+
+        this.remove(restartButton);
+        restartButton = null;
+
+        gameLoop.start();
+        repaint();
     }
 
     @Override
