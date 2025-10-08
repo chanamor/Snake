@@ -10,8 +10,7 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
 
     private int border;
     private int tile;
-    private JButton restartButton;
-
+    private int t=1;
     String playerName;
 
     
@@ -23,7 +22,7 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
 
     //Food
     Food food;
-    
+    FoodSpecial foodSpecial;
     // Logic
     Timer gameLoop;
     int velocityX;
@@ -46,7 +45,7 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
 
         // Food
         food = new Food(border, border, tileSize);
-
+        foodSpecial = new FoodSpecial(border, border, tileSize);
 
         
         // Game loop
@@ -76,37 +75,13 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         g.setFont(new Font("Monospaced", Font.BOLD, 40));
         FontMetrics metrics = getFontMetrics(g.getFont());
         g.drawString("GAME OVER", (border - metrics.stringWidth("GAME OVER")) / 2, border / 2);
-
-
-        if (restartButton == null) {
-            restartButton = new JButton("Restart");
-            restartButton.setBounds(border / 2 - 60, border / 2 + 50, 120, 40);
-            restartButton.setBackground(new Color(0, 125, 42));
-            restartButton.setFont(new Font("Monospaced", Font.BOLD, 18));
-            restartButton.setForeground(Color.WHITE);
-
-            restartButton.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    restartgame();
-                }
-                
-            });
-
-
-
-            this.setLayout(null);
-            this.add(restartButton);
-            this.repaint();
-        }
     }
     
 
     public void draw(Graphics g) {//การวาด
                  // Draw food
         food.draw(g);
-
+        foodSpecial.drawFoodSpecial(g);
 
         // Draw snake head
         g.setColor(Color.GREEN);//วาดหัวงู
@@ -128,10 +103,14 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
     public void move() {
       //Food
         Tile foodTile = food.getFoodTile();
+        Tile foodSPTile= foodSpecial.getFoodSpTile();
         if (collision(snakeHead, foodTile)) {
             snakeBody.add(new Tile(foodTile.getX(), foodTile.getY()));
             food.placeFood();
-        }
+        } 
+        if (collision(snakeHead, foodSPTile)) {
+            snakeBody.add(new Tile(foodSPTile.getX(), foodSPTile.getY()));
+                foodSpecial.placeFood();t++;}
 
 
 
@@ -143,8 +122,8 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
                 snakeBody.get(i).x = snakeHead.x;
                 snakeBody.get(i).y = snakeHead.y;
             } else {
-                snakeBody.get(i).x = snakeBody.get(i - 1).x;
-                snakeBody.get(i).y = snakeBody.get(i - 1).y;
+                snakeBody.get(i).x = snakeBody.get(i - (1+(t-1))).x;
+                snakeBody.get(i).y = snakeBody.get(i - (1+(t-1))).y;
             }
         }
 
@@ -179,30 +158,6 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         }
     }
 
-
-    private void restartgame(){
-        snakeBody.clear();
-        snakeBody.add(new Tile(5, 5));
-        snakeHead = new Tile(5, 5);
-
-
-        velocityX = 1;
-        velocityY =0;
-
-
-        food.placeFood();
-
-
-        gameOver = false;
-
-
-        this.remove(restartButton);
-        restartButton = null;
-
-        gameLoop.start();
-        repaint();
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         move();
@@ -217,17 +172,17 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_UP && velocityY != 1) {
+        if (e.getKeyCode() == KeyEvent.VK_UP && velocityY != t) {
             velocityX = 0;
-            velocityY = -1;
-        } else if (e.getKeyCode() == KeyEvent.VK_DOWN && velocityY != -1) {
+            velocityY = -t;
+        } else if (e.getKeyCode() == KeyEvent.VK_DOWN && velocityY != -t) {
             velocityX = 0;
-            velocityY = 1;
-        } else if (e.getKeyCode() == KeyEvent.VK_LEFT && velocityX != 1) {
-            velocityX = -1;
+            velocityY = t;
+        } else if (e.getKeyCode() == KeyEvent.VK_LEFT && velocityX != t) {
+            velocityX = -t;
             velocityY = 0;
-        } else if (e.getKeyCode() == KeyEvent.VK_RIGHT && velocityX != -1) {
-            velocityX = 1;
+        } else if (e.getKeyCode() == KeyEvent.VK_RIGHT && velocityX != -t) {
+            velocityX = t;
             velocityY = 0;
         }
     }
