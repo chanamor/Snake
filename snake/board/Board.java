@@ -8,6 +8,7 @@ public class Board extends JPanel {
 
         private String playerName;
         private Snake snakegame;
+        
 
 
         final int border = 600;
@@ -18,6 +19,7 @@ public class Board extends JPanel {
         public Board(String playerName) {
 
             this.playerName = playerName;
+            
 
 
             JFrame frame = new JFrame("Snake");
@@ -31,7 +33,7 @@ public class Board extends JPanel {
             layeredPane.setPreferredSize(new Dimension(border, border_height));
 
         // Snake game (เลเยอร์ล่าง)
-            snakegame = new Snake(border, tile);
+            snakegame = new Snake(border, tile, playerName);
             snakegame.setBounds(0, 0, border, border_height);
             layeredPane.add(snakegame, Integer.valueOf(0));
 
@@ -55,15 +57,24 @@ public class Board extends JPanel {
             g.setFont(new Font("Monospaced", Font.BOLD, 18));
             g.drawString("Player: " + playerName, 10, 20);
 
-           
+        
         }
+
+           
+        
+
+
+       
+
+       
+    }
 
         
 
 
 
            
-        }
+        
 
         
 
