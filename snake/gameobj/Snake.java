@@ -13,7 +13,7 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
     private int border;
     private int tile;
     private JButton restartButton;
-    
+    private int t=1;//
 
     private String playerName;
 
@@ -26,7 +26,7 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
 
     //Food
     Food food;
-    
+    FoodSpecial foodSpecial;
     // Logic
     Timer gameLoop;
     int velocityX;
@@ -49,6 +49,7 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
 
         // Food
         food = new Food(border, border, tileSize);
+        foodSpecial = new FoodSpecial(border, border, tileSize);
 
 
         
@@ -109,7 +110,7 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
     public void draw(Graphics g) {//การวาด
                  // Draw food
         food.draw(g);
-
+        foodSpecial.drawFoodSpecial(g);
 
         // Draw snake head
         g.setColor(Color.GREEN);//วาดหัวงู
@@ -119,6 +120,7 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         for (Tile part : snakeBody) {//วาดตัวงู
             g.fillRect(part.x * tileSize, part.y * tileSize, tileSize, tileSize);
         }
+        
 
 
        
@@ -131,10 +133,15 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
     public void move() {
       //Food
         Tile foodTile = food.getFoodTile();
+        Tile foodSPTile= foodSpecial.getFoodSpTile();
+       
         if (collision(snakeHead, foodTile)) {
             snakeBody.add(new Tile(foodTile.getX(), foodTile.getY()));
             food.placeFood();
-        }
+        } if (collision(snakeHead, foodSPTile)) {
+            snakeBody.add(new Tile(foodSPTile.getX(), foodSPTile.getY()));
+                foodSpecial.placeFood();t+=1;}
+
 
 
 
@@ -244,17 +251,17 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
     
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_UP && velocityY != 1) {
+        if (e.getKeyCode() == KeyEvent.VK_UP && velocityY != t) {
             velocityX = 0;
-            velocityY = -1;
-        } else if (e.getKeyCode() == KeyEvent.VK_DOWN && velocityY != -1) {
+            velocityY = -t;
+        } else if (e.getKeyCode() == KeyEvent.VK_DOWN && velocityY != -t) {
             velocityX = 0;
-            velocityY = 1;
-        } else if (e.getKeyCode() == KeyEvent.VK_LEFT && velocityX != 1) {
-            velocityX = -1;
+            velocityY = t;
+        } else if (e.getKeyCode() == KeyEvent.VK_LEFT && velocityX != t) {
+            velocityX = -t;
             velocityY = 0;
-        } else if (e.getKeyCode() == KeyEvent.VK_RIGHT && velocityX != -1) {
-            velocityX = 1;
+        } else if (e.getKeyCode() == KeyEvent.VK_RIGHT && velocityX != -t) {
+            velocityX = t;
             velocityY = 0;
         }
     }
