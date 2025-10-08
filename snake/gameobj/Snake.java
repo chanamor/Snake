@@ -29,6 +29,9 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
     FoodSpecial foodSpecial;
     // Logic
     Timer gameLoop;
+    private final int baseDelay = 100; // initial timer delay (ms)
+    private int currentDelay; // current timer delay (ms)
+    private final int minDelay = 30; // fastest allowed delay (ms)
     int velocityX;
     int velocityY;
     boolean gameOver = false;
@@ -56,7 +59,8 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         // Game loop
         velocityX = 0;
         velocityY = 1;//งูเริ่มต้นขยับลงล่าง
-        gameLoop = new Timer(100, this);
+        currentDelay = baseDelay;
+        gameLoop = new Timer(currentDelay, this);
         gameLoop.start();
     }
 
@@ -133,14 +137,23 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
     public void move() {
       //Food
         Tile foodTile = food.getFoodTile();
-        Tile foodSPTile= foodSpecial.getFoodSpTile();
-       
+
         if (collision(snakeHead, foodTile)) {
             snakeBody.add(new Tile(foodTile.getX(), foodTile.getY()));
             food.placeFood();
-        } if (collision(snakeHead, foodSPTile)) {
-            snakeBody.add(new Tile(foodSPTile.getX(), foodSPTile.getY()));
-                foodSpecial.placeFood();t+=1;}
+        }
+
+        // handle multiple special food tiles
+        java.util.List<Tile> spTiles = foodSpecial.getFoodSpTiles();
+        for (int i = 0; i < spTiles.size(); i++) {
+            Tile sp = spTiles.get(i);
+            if (collision(snakeHead, sp)) {
+                
+                foodSpecial.placeFood(i);
+                // increase game speed
+                increaseSpeed();
+            }
+        }
 
 
 
@@ -204,7 +217,14 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         velocityY =0;
 
 
-        food.placeFood();
+    food.placeFood();
+    foodSpecial.placeAllFoods();
+       
+        // reset speed
+        currentDelay = baseDelay;
+        if (gameLoop != null) {
+            gameLoop.setDelay(currentDelay);
+        }
 
 
         gameOver = false;
@@ -269,6 +289,14 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         // optional
+    }
+
+    private void increaseSpeed() {
+        
+        currentDelay = Math.max(minDelay, currentDelay - 10);
+        if (gameLoop != null) {
+            gameLoop.setDelay(currentDelay);
+        }
     }
 }
 
