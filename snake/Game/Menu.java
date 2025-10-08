@@ -128,7 +128,7 @@ public class Menu extends JFrame implements ActionListener {
         FileWriter fw = null;
         BufferedWriter bw = null;
         try {
-            f = new File("./SNAKE/Nameplayer/NAME.csv");
+            f = new File("./Nameplayer/NAME.csv");
             fw = new FileWriter(f,true);
             bw = new BufferedWriter(fw);
             bw.write(playerName+"\n");

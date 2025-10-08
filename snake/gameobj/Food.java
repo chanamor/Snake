@@ -34,5 +34,4 @@ public class Food {
         g.setColor(Color.RED);
         g.fillRect(foodTile.getX() * tileSize, foodTile.getY() * tileSize, tileSize, tileSize);
     }
-    
 }
