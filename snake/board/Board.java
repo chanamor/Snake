@@ -3,12 +3,14 @@ import javax.swing.*;
 import gameobj.Snake;
 import java.awt.*;
 
+import score.Score;
+
+
 
 public class Board extends JPanel {
 
         private String playerName;
         private Snake snakegame;
-        
 
 
         final int border = 600;
@@ -33,7 +35,7 @@ public class Board extends JPanel {
             layeredPane.setPreferredSize(new Dimension(border, border_height));
 
         // Snake game (เลเยอร์ล่าง)
-            snakegame = new Snake(border, tile, playerName);
+            snakegame = new Snake(border, tile, this.playerName);
             snakegame.setBounds(0, 0, border, border_height);
             layeredPane.add(snakegame, Integer.valueOf(0));
 
@@ -49,24 +51,57 @@ public class Board extends JPanel {
             frame.setVisible(true);
 
             snakegame.requestFocus();
+
         }
+
 
         protected void paintComponent(Graphics g){
             super.paintComponent(g);
             g.setColor(Color.GREEN);
             g.setFont(new Font("Monospaced", Font.BOLD, 18));
             g.drawString("Player: " + playerName, 10, 20);
-
+            if (snakegame != null) {
+                g.drawString("Score: " + snakegame.getScore(), 10, 45);
+            }
+            
+            if(snakegame != null && snakegame.GameIsOver() ){
+                ReportScore(g);
+            }
         
         }
 
+        private void ReportScore(Graphics g) {
+            g.setColor(new Color(0, 0, 0, 150));
+            g.fillRect(0, 0, border, border_height);
+
+            g.setColor(Color.RED);
+            g.setFont(new Font("Monospaced", Font.BOLD, 50));
+            FontMetrics metrics1 = g.getFontMetrics();
+            g.drawString("GAME OVER", (border - metrics1.stringWidth("GAME OVER")) / 2, 100);
+
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("Monospaced", Font.PLAIN, 16));
+            FontMetrics metrics2 = g.getFontMetrics();
+            String highScore = Score.getFormattedHightScore(playerName, snakegame.getScore());
+
+            // วาดข้อความทีละบรรทัด
+            int y = 180;
+            for (String line : highScore.split("\n")){
+                g.drawString(line, (border - metrics2.stringWidth(line)) / 2, y);
+                y += 25; // เว้นระยะห่างทีละบรรทัด
+            }
+
+            y += 40;
+            g.setFont(new Font("Monospaced", Font.BOLD, 20));
+            FontMetrics metrics3 = g.getFontMetrics();
+            g.setColor(Color.YELLOW);
+            g.drawString("Press Enter to Play Egain", (border - metrics3.stringWidth("Press ENTER to Play Again")) / 2, y);
+            y += 30; // เว้นบรรทัด
+            g.drawString("Press Esc to Exit", (border - metrics3.stringWidth("Press ESC to Exit")) / 2, y);
+
+        }
            
         
-
-
-       
-
-       
     }
 
         

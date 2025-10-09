@@ -1,10 +1,12 @@
 
 package gameobj;
 
+import Game.Menu;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.*;
 
@@ -12,10 +14,11 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
 
     private int border;
     private int tile;
-    private JButton restartButton;
     private int t=1;//
 
     private String playerName;
+    private int score;
+    private boolean scoreSaved; // กันการ save ซ้ำ
 
     
     int tileSize = 25;//ขนาด 1 ช่อง (ตาราง)
@@ -29,6 +32,9 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
     FoodSpecial foodSpecial;
     // Logic
     Timer gameLoop;
+    private final int baseDelay = 100; // initial timer delay (ms)
+    private int currentDelay; // current timer delay (ms)
+    private final int minDelay = 30; // fastest allowed delay (ms)
     int velocityX;
     int velocityY;
     boolean gameOver = false;
@@ -51,61 +57,54 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         food = new Food(border, border, tileSize);
         foodSpecial = new FoodSpecial(border, border, tileSize);
 
-
+        // Score
+        this.score = 0;
+        this.scoreSaved = false;
         
         // Game loop
         velocityX = 0;
         velocityY = 1;//งูเริ่มต้นขยับลงล่าง
+        currentDelay = baseDelay;
         gameLoop = new Timer(100, this);
         gameLoop.start();
     }
 
+    public int getScore() {
+        return this.score;
+    }
+
+    public boolean GameIsOver() {
+        return this.gameOver;
+    }
+
+    public void write_score() {
+        File f = null;
+        FileWriter fw = null;
+        BufferedWriter bw = null;
+        try {
+            f = new File("./Nameplayer/NAME.csv");
+            f.getParentFile().mkdirs();
+
+            fw = new FileWriter(f,true);
+            bw = new BufferedWriter(fw);
+            bw.write(this.playerName + "," + this.score + "\n");
+        } catch (Exception e){
+            System.out.println(e);
+        } finally {
+            try {
+                if (bw != null) bw.close();
+                if (fw != null) fw.close();
+            } catch (Exception e) {
+            System.out.println(e);
+            }
+        }
+    }
+
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        
-
-        if (gameOver) {
-            drawgameover(g);
-        }else{
-            draw(g);
-        }
-
-        
+        draw(g);  
     }
         
-    
-
-    private void drawgameover(Graphics g){
-        g.setColor(Color.RED);
-        g.setFont(new Font("Monospaced", Font.BOLD, 40));
-        FontMetrics metrics = getFontMetrics(g.getFont());
-        g.drawString("GAME OVER", (border - metrics.stringWidth("GAME OVER")) / 2, border / 2);
-
-
-        if (restartButton == null) {
-            restartButton = new JButton("Restart");
-            restartButton.setBounds(border / 2 - 60, border / 2 + 50, 120, 40);
-            restartButton.setBackground(new Color(0, 125, 42));
-            restartButton.setFont(new Font("Monospaced", Font.BOLD, 18));
-            restartButton.setForeground(Color.WHITE);
-
-            restartButton.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    restartgame();
-                }
-                
-            });
-
-
-
-            this.setLayout(null);
-            this.add(restartButton);
-            this.repaint();
-        }
-    }
-    
 
     public void draw(Graphics g) {//การวาด
                  // Draw food
@@ -120,10 +119,7 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         for (Tile part : snakeBody) {//วาดตัวงู
             g.fillRect(part.x * tileSize, part.y * tileSize, tileSize, tileSize);
         }
-        
-
-
-       
+             
     }
 
     public boolean collision(Tile t1, Tile t2) {
@@ -133,14 +129,21 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
     public void move() {
       //Food
         Tile foodTile = food.getFoodTile();
-        Tile foodSPTile= foodSpecial.getFoodSpTile();
        
         if (collision(snakeHead, foodTile)) {
             snakeBody.add(new Tile(foodTile.getX(), foodTile.getY()));
             food.placeFood();
-        } if (collision(snakeHead, foodSPTile)) {
-            snakeBody.add(new Tile(foodSPTile.getX(), foodSPTile.getY()));
-                foodSpecial.placeFood();t+=1;}
+            score++;
+        } java.util.List<Tile> spTiles = foodSpecial.getFoodSpTiles();
+        for (int i = 0; i < spTiles.size(); i++) {
+            Tile sp = spTiles.get(i);
+            if (collision(snakeHead, sp)) {
+                
+                foodSpecial.placeFood(i);
+                // increase game speed
+                increaseSpeed();
+            }
+        }
 
 
 
@@ -192,26 +195,24 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
 
     private void restartgame(){
         
-        Saveplayername(playerName);
-        
-
-        snakeBody.clear();
-        snakeBody.add(new Tile(5, 5));
         snakeHead = new Tile(5, 5);
+        snakeBody.clear();
 
+        score = 0;
+        gameOver = false;
+        scoreSaved = false;
 
         velocityX = 1;
         velocityY =0;
 
-
         food.placeFood();
+        foodSpecial.placeAllFoods();
 
-
-        gameOver = false;
-
-
-        this.remove(restartButton);
-        restartButton = null;
+        // reset speed
+        currentDelay = baseDelay;
+        if (gameLoop != null) {
+            gameLoop.setDelay(currentDelay);
+        }
 
         gameLoop.start();
         repaint();
@@ -219,17 +220,7 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
 
 
 
-    // บันทุึกชื่อซ้ำ
 
-    private void Saveplayername(String playerName) {
-       
-
-        try (FileWriter writer = new FileWriter("./Nameplayer/NAME.csv", true)) {
-        writer.append(playerName + "\n");
-        } catch (IOException e) {
-        e.printStackTrace();
-        }
-    }
 
 
     @Override
@@ -238,6 +229,10 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         repaint();
         if (gameOver) {
             gameLoop.stop();
+            if (!scoreSaved) {
+                write_score();
+                scoreSaved = true;
+            }
         }
     }
 
@@ -251,25 +246,46 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
     
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_UP && velocityY != t) {
+        if (!gameOver) {
+
+        if (e.getKeyCode() == KeyEvent.VK_UP && velocityY != 1) {
             velocityX = 0;
-            velocityY = -t;
-        } else if (e.getKeyCode() == KeyEvent.VK_DOWN && velocityY != -t) {
+            velocityY = -1;
+        } else if (e.getKeyCode() == KeyEvent.VK_DOWN && velocityY != -1) {
             velocityX = 0;
-            velocityY = t;
-        } else if (e.getKeyCode() == KeyEvent.VK_LEFT && velocityX != t) {
-            velocityX = -t;
+            velocityY = 1;
+        } else if (e.getKeyCode() == KeyEvent.VK_LEFT && velocityX != 1) {
+            velocityX = -1;
             velocityY = 0;
-        } else if (e.getKeyCode() == KeyEvent.VK_RIGHT && velocityX != -t) {
-            velocityX = t;
+        } else if (e.getKeyCode() == KeyEvent.VK_RIGHT && velocityX != -1) {
+            velocityX = 1;
             velocityY = 0;
+        } 
+    }else {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+            restartgame();
+        } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this); //
+            if(frame!= null) {
+                frame.dispose();
+                new Menu();
+            }
         }
-    }
+        }
+    } 
 
     @Override
     public void keyReleased(KeyEvent e) {
         // optional
     }
+
+    private void increaseSpeed() {
+        currentDelay = Math.max(minDelay, currentDelay - 10);
+        if (gameLoop != null) {
+            gameLoop.setDelay(currentDelay);
+        }
+    }
+    
 }
 
 
