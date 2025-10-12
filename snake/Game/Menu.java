@@ -7,11 +7,13 @@ import board.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import music_effect.*;
 
 public class Menu extends JFrame implements ActionListener {
     
     private JButton start , how ;
     private JTextField nameField;
+    private Music bgMusic;
 
     public Menu() {
 
@@ -29,7 +31,8 @@ public class Menu extends JFrame implements ActionListener {
 
 
       
-
+        bgMusic = new Music();
+        bgMusic.playMusic("./music_effect/pokemon-littleroot-town-remaster-128-ytshorts.savetube.me (1).wav",true);
       
           
         Container cp = getContentPane();
@@ -113,6 +116,7 @@ public class Menu extends JFrame implements ActionListener {
             }else{
             write_csv(playerName);
             dispose();
+            bgMusic.stopMusic();
            new Board(playerName);
            
             }
