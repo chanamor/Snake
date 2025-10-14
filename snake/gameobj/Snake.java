@@ -112,8 +112,15 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
 
     public void draw(Graphics g) {//การวาด
                  // Draw food
-        food.draw(g);
-        foodSpecial.drawFoodSpecial(g);
+                 foodSpecial.drawFoodSpecial(g);
+                 if (food.getFoodTile()!=(foodSpecial.getFoodSpTile())) {//ตรวจสอบว่า Food มีตำแหน่ง เท่า กับ foodSpecial ให้ทำการ RandomFood ใหม่
+                    food.draw(g);
+                   
+                 } else{ if (food.getFoodTile()==(foodSpecial.getFoodSpTile())) {
+                   food.RandomFood();
+                   food.draw(g);
+                 }
+                   }
 
         // Draw snake head
         g.setColor(Color.GREEN);//วาดหัวงู
