@@ -20,12 +20,16 @@ public class Food {
     }
 
     public void placeFood() {
-        int x = random.nextInt(boardWidth / tileSize);
-        int y = random.nextInt(boardHeight / tileSize);
-        foodTile.setX(x);
-        foodTile.setY(y);
+        Tile newTile = RandomFood();
+        foodTile.setX(newTile.getX());
+        foodTile.setY(newTile.getY());
     }
 
+    public Tile RandomFood() {
+        int x = random.nextInt(boardWidth / tileSize);
+        int y = random.nextInt(boardHeight / tileSize);
+        return new Tile(x, y);
+    }
     public Tile getFoodTile() {
         return foodTile;
     }
