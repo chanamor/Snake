@@ -17,41 +17,27 @@ public record Score(String playerName, int score) implements Comparable<Score> {
         return String.format("%-20s: %d", playerName, score);
     }
     
-    public static String getFormattedHightScore(String CurrentNamePlayyer, int CurrentScore) {
-        File f = new File("./Score/NAME_SCORE.csv");
-        if(!f.exists()) {
-            return "--- HIGH SCORE ---\n\n" + new Score(CurrentNamePlayyer, CurrentScore).toString() + " <-- YOU\n";
+    public static ArrayList<Score> getHighScores() {
+        File f = new File("./Nameplayer/NAME_SCORE.csv");
+        ArrayList<Score> scoreList = new ArrayList<>();
+        if (!f.exists()) {
+            return scoreList;
         }
 
-        ArrayList<Score> scoreList = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(f))){
+        try (BufferedReader br = new BufferedReader(new FileReader(f))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
                 if (parts.length >= 2) {
                     try {
                         scoreList.add(new Score(parts[0].trim(), Integer.parseInt(parts[1].trim())));
-                    }   catch (NumberFormatException ignored){}
+                    } catch (NumberFormatException ignored) {}
                 }
             }
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
-
-        Collections.sort(scoreList); // เรียงลำดับ score
-
-        StringBuilder sb = new StringBuilder("--- HIGH SCORES ---\n\n");
-        boolean playerfound = false;
-        for (int i = 0; i < Math.min(5, scoreList.size());i++){
-            Score s = scoreList.get(i);
-            sb.append(s.toString());
-
-            if (s.playerName.equals(CurrentNamePlayyer) && s.score() == CurrentScore && !playerfound){
-                sb.append(" <-- IS YOU");
-                playerfound = true;
-            }
-            sb.append("\n");
-        }
-        return sb.toString();
+        Collections.sort(scoreList);
+        return scoreList;
     }
 }

@@ -82,7 +82,7 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         FileWriter fw = null;
         BufferedWriter bw = null;
         try {
-            f = new File("./Nameplayer/NAME.csv");
+            f = new File("./Nameplayer/NAME_SCORE.csv");
             f.getParentFile().mkdirs();
 
             fw = new FileWriter(f,true);
@@ -92,12 +92,16 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
             System.out.println(e);
         } finally {
             try {
-                if (bw != null) bw.close();
-                if (fw != null) fw.close();
+                bw.close();fw.close();
             } catch (Exception e) {
             System.out.println(e);
             }
         }
+        this.scoreSaved = true;
+    }
+
+    public boolean isScoresaved(){
+        return scoreSaved;
     }
 
     public void paintComponent(Graphics g) {
@@ -229,10 +233,6 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         repaint();
         if (gameOver) {
             gameLoop.stop();
-            if (!scoreSaved) {
-                write_score();
-                scoreSaved = true;
-            }
         }
     }
 
