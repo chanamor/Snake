@@ -6,7 +6,6 @@ import board.*;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
 import music_effect.*;
 
 public class Menu extends JFrame implements ActionListener {
@@ -114,7 +113,7 @@ public class Menu extends JFrame implements ActionListener {
             if (playerName.isEmpty() || playerName.equals("ENTER NAME")) {
                 JOptionPane.showMessageDialog(this,"Please enter your name first! ");
             }else{
-            write_csv(playerName);
+            
             dispose();
             bgMusic.stopMusic();
            new Board(playerName);
@@ -125,26 +124,5 @@ public class Menu extends JFrame implements ActionListener {
         }
         
     }
-    //สร้างไฟล์เก็บรายชื่อ
-    public void write_csv(String playerName) {
-        
-        File f = null;
-        FileWriter fw = null;
-        BufferedWriter bw = null;
-        try {
-            f = new File("./Nameplayer/NAME.csv");
-            fw = new FileWriter(f,true);
-            bw = new BufferedWriter(fw);
-            bw.write(playerName+"\n");
-        } catch (Exception e) {
-            System.out.println(e);
-        } finally {
-            try {
-                if (bw != null) bw.close();
-                if (fw != null) fw.close();
-            } catch (Exception e){
-                System.out.println(e);
-            }
-        }
-    }
+    
 }
