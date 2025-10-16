@@ -15,7 +15,7 @@ public class FoodSpecial  {
 
    
     public FoodSpecial(int boardWidth, int boardHeight, int tileSize) {
-        this(boardWidth, boardHeight, tileSize, 5);
+        this(boardWidth, boardHeight, tileSize, 6);
     }
 
     public FoodSpecial(int boardWidth, int boardHeight, int tileSize, int count) {
