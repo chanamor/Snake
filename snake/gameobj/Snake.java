@@ -14,7 +14,7 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
 
     private int border;
     private int tile;
-    private int t=1;//
+   
 
     private String playerName;
     private int score;
@@ -32,9 +32,9 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
     FoodSpecial foodSpecial;
     // Logic
     Timer gameLoop;
-    private final int baseDelay = 100; // initial timer delay (ms)
+    private final int baseDelay = 80; // initial timer delay (ms)
     private int currentDelay; // current timer delay (ms)
-    private final int minDelay = 30; // fastest allowed delay (ms)
+    private final int minDelay = 20; // fastest allowed delay (ms)
     int velocityX;
     int velocityY;
     boolean gameOver = false;
@@ -142,17 +142,22 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
         Tile foodTile = food.getFoodTile();
        
         if (collision(snakeHead, foodTile)) {
+            
             snakeBody.add(new Tile(foodTile.getX(), foodTile.getY()));
             food.placeFood();
-            score++;
+            score++;decreaseSpeed();
         } java.util.List<Tile> spTiles = foodSpecial.getFoodSpTiles();
         for (int i = 0; i < spTiles.size(); i++) {
             Tile sp = spTiles.get(i);
             if (collision(snakeHead, sp)) {
-                
+                score--;
+                if (score<0) {
+                    score=0;
+                }
                 foodSpecial.placeFood(i);
                 // increase game speed
                 increaseSpeed();
+                
             }
         }
 
@@ -287,7 +292,15 @@ public class Snake extends JPanel implements ActionListener, KeyListener {
     }
 
     private void increaseSpeed() {
-        currentDelay = Math.max(minDelay, currentDelay - 10);
+        currentDelay = Math.max(minDelay, currentDelay - 20);
+        if (gameLoop != null) {
+            gameLoop.setDelay(currentDelay);
+        }
+    
+    
+    }
+    private void decreaseSpeed(){
+        currentDelay = Math.max(currentDelay, baseDelay + 20);
         if (gameLoop != null) {
             gameLoop.setDelay(currentDelay);
         }
