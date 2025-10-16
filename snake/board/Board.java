@@ -94,8 +94,8 @@ public class Board extends JPanel {
         int textX = (border - metrics2.stringWidth(scoreText)) / 2;
         
         if (s.playerName().equals(playerName) && s.score() == snakegame.getScore() && !PlayerInList) {
-            g.drawString(scoreText, textX, y);
-            g.drawString("       <-- IS YOU ", textX + metrics2.stringWidth(yourScoreText), y);            
+            g.setColor(Color.GREEN);
+            g.drawString(scoreText, textX, y);         
             PlayerInList = true;
         }else{
         g.setColor(Color.WHITE); 
